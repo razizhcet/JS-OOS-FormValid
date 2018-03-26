@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Object Oriented JavaScript</title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <script type="text/javascript">
+        var customer = {
+          name: 'Razi Ahmad',
+          speak: function(){
+            return "My name is " + this.name;
+          },
+          address: {
+            street: "9th 'A' main",
+            city: 'Bangalore',
+            state: 'KR'
+          }
+        };
+        document.write(customer.speak() + "<br />");
+        document.write(customer.name + " lives at " + customer.address.street + "<br />");
+        document.write(customer.address.city + "<br />");
+        document.write(customer.address.state + "<br />");
+        customer.address.country = "India";
+        document.write(customer.address.country + "<br />");
+
+        function Person(name, street) {
+            this.name = name;
+            this.street = street;
+            this.info = function () {
+                return "His name is " + this.name + " and He livs on " + this.street;
+            }
+        }
+        var friend = new Person("Anil Kattam", "11th 'B' main");
+        document.write(friend.info() + "<br />");
+
+        document.write("Anil is a person : " + (friend instanceof Person) + "<br />");
+        function changeName(person) {
+            person.name = "Only Kattam";
+        }
+        changeName(friend);
+        document.write("Anil Kattam became " + friend.name + "<br />");
+
+        var person1 = new Person("Raju", "123 Main");
+        var person2 = new Person("Raju", "123 Main");
+        document.write("Are they equal : " + (person1 == person2) + "<br />");
+
+        function getSum(num1, num2) {
+            return num1 + num2;
+        }
+        document.write("Num of arguments : " + getSum.length + "<br />");
+
+        function Mammal(name) {
+            this.name = name;
+            this.getInfo = function () {
+                return "The mammals name is " + this.name;
+            }
+        }
+        Mammal.prototype.sound = "Grrrrr";
+        Mammal.prototype.makeSound = function () {
+            return this.name + " says " + this.sound;
+        };
+        var grover = new Mammal("Grover");
+        document.write(grover.makeSound() + "<br />");
+        for (var prop in grover) {
+            document.write(prop + " : " + grover[prop] + "<br />");
+        }
+        document.write("name Property of Grover : " + grover.hasOwnProperty("name") + "<br />");
+        document.write("sound Property of Grover : " + grover.hasOwnProperty("sound") + "<br />");
+
+        Array.prototype.inArray = function inArray(value) {
+            for (i = 0; i < this.length; i++) {
+                if (this[i] === value) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        var sampArray = [1, 2, 3, 4, 5];
+        document.write("3 in array : " + sampArray.inArray(3) + "<br />");
+
+        function SecretCode() {
+            var secretNum = 78;
+            this.guessNum = function (num) {
+                if (num > 78) {
+                    return "Lower";
+                } else if (num < 78) {
+                    return "Higher";
+                } else {
+                    return "You Guessed It";
+                }
+            }
+        }
+        var secret = new SecretCode();
+        document.write("Value of secretNum : " + secret.secretNum + "<br />");
+        document.write("Is 70 the number : " + secret.guessNum(70) + "<br />");
+        document.write("Is 80 the number : " + secret.guessNum(80) + "<br />");
+        document.write("Is 78 the number : " + secret.guessNum(78) + "<br />");
+
+        SecretCode.prototype.getSecret = function () {
+            return this.secretNum;
+        }
+        document.write("The secret number is " + secret.getSecret() + "<br />");
+
+        var address = {
+            street: "No Street",
+            city: "No City",
+            state: "No State",
+            get getAddress() {
+                return this.street + ", " + this.city + ", " + this.state;
+            },
+            set setAddress(theAddress) {
+                var parts = theAddress.toString().split(", ");
+                this.street = parts[0] || "";
+                this.city = parts[1] || "";
+                this.state = parts[2] || "";
+            }
+        }
+        address.setAddress = "9th 'A' Main, Bangalore, KR";
+        document.write("Address : " + address.getAddress + "<br />");
+        document.write("City : " + address.city + "<br />");
+        // ---------- CONSTRUCTOR GETTERS AND SETTERS(Deprecated) ----------
+        function Coordinates() {
+            this.latitude = 0.0;
+            this.longitude = 0.0;
+        }
+        Object.__defineGetter__.call(Coordinates.prototype, "getCoords", function () {
+            return "Lat : " + this.latitude + " Long: " + this.longitude;
+        });
+        Object.__defineSetter__.call(Coordinates.prototype, "setCoords", function (coords) {
+            var parts = coords.toString().split(", ");
+            this.latitude = parts[0] || "";
+            this.longitude = parts[1] || "";
+        });
+        var testCoords = new Coordinates();
+        testCoords.setCoords = "40.71, 74.00";
+        document.write("Coordinates : " + testCoords.getCoords + "<br />");
+        // ---------- GETTERS AND SETTERS WITH DEFINEPROPERTY ----------
+        function Point() {
+            this.xPos = 0;
+            this.yPos = 0;
+        }
+        Object.defineProperty(Point.prototype, "pointPos", {
+            get: function () {
+                return "X: " + this.xPos + " Y: " + this.yPos;
+            },
+            set: function (thePoint) {
+                var parts = thePoint.toString().split(", ");
+                this.xPos = parts[0] || "";
+                this.yPos = parts[1] || "";
+            }
+        });
+        var aPoint = new Point();
+        aPoint.pointPos = "100, 200";
+        document.write("Point Position : " + aPoint.pointPos + "<br />");
+        // ---------- ECMASCRIPT 5.1 GETTERS AND SETTERS ----------
+        var Circle = function (radius) {
+            this._radius = radius;
+        };
+        Circle.prototype = {
+            set radius(radius) { this._radius = radius; },
+            get radius() { return this._radius; },
+            get area() { return Math.PI * (this._radius * this._radius); }
+        };
+        var circ = new Circle(10);
+        circ.radius = 15;
+        document.write("A circle with radius " + circ.radius + " has an area of " + circ.area.toFixed(2) + "<br />");
+        // ---------- INHERITANCE ----------
+        function Animal() {
+            this.name = "Animal";
+            // toString is a function in the main Object that every
+            // object inherits from
+            this.toString = function () {
+                return "My name is : " + this.name;
+            };
+        }
+        function Canine() {
+            this.name = "Canine";
+        }
+        function Wolf() {
+            this.name = "Wolf";
+        }
+        // Overwrite the prototype for Canine and Wolf
+        Canine.prototype = new Animal();
+        Wolf.prototype = new Canine();
+        Canine.prototype.constructor = Canine;
+        Wolf.prototype.constructor = Wolf;
+        var arcticWolf = new Wolf();
+        document.write(arcticWolf.toString() + "<br />");
+        document.write("Wolf instance of Animal : " + (arcticWolf instanceof Animal) + "<br />");
+
+        // Properties added to any object in the chain is inherited
+        Animal.prototype.sound = "Grrrrr";
+        Animal.prototype.getSound = function () {
+            return this.name + " says " + this.sound;
+        }
+        Canine.prototype.sound = "Woof";
+        Wolf.prototype.sound = "Grrrr Wooof";
+        document.write(arcticWolf.getSound() + "<br />");
+
+        function Rodent() {
+            this.name = "Rodent";
+        }
+        function Rat() {
+            this.name = "Rat";
+        }
+        Rodent.prototype = new Animal();
+        Rat.prototype = Rodent.prototype;
+        Rodent.prototype.constructor = Rodent;
+        Rat.prototype.constructor = Rat;
+        var caneRat = new Rat();
+        document.write(caneRat.toString() + "<br />");
+
+        // ---------- INTERMEDIATE FUNCTION INHERITANCE ----------
+        function extend(Child, Parent) {
+            var Temp = function () { };
+
+            Temp.prototype = Parent.prototype;
+
+            Child.prototype = new Temp();
+
+            Child.prototype.constructor = Child;
+
+        }
+
+        function Deer() {
+            this.name = "Deer";
+            this.sound = "Snort";
+        }
+
+        extend(Deer, Animal);
+
+        var elk = new Deer();
+
+        document.write(elk.getSound() + "<br />");
+
+        // ---------- CALL PARENT METHODS ----------
+        function Vehicle(name) {
+            this.name = "Vehicle"
+        }
+
+        // Functions for the parent object
+        Vehicle.prototype = {
+            drive: function () {
+                return this.name + " drives forward";
+            },
+            stop: function () {
+                return this.name + " stops";
+            }
+        }
+
+        function Truck(name) {
+            this.name = name
+        }
+
+        // Inherit from Vehicle
+        Truck.prototype = new Vehicle();
+        Truck.prototype.constructor = Truck;
+
+        // Overwrite drive parent method
+        Truck.prototype.drive = function () {
+
+            // Call the parent method with apply so that the parent
+            // method can access the Trucks name value
+            var driveMsg = Vehicle.prototype.drive.apply(this);
+            return driveMsg += " through a field";
+        }
+
+        var jeep = new Truck("Jeep");
+
+        document.write(jeep.drive() + "<br />");
+
+        document.write(jeep.stop() + "<br />");
+   </script>
+</body>
+</html>
